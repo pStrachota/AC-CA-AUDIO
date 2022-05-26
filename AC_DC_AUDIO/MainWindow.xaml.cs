@@ -27,7 +27,6 @@ namespace AC_DC_AUDIO
         public MainWindow()
         {
             InitializeComponent();
-
             SampleRates.ItemsSource = SampleRatesList;
             BitsDepth.ItemsSource = BithDepthsList;
         }
@@ -50,7 +49,7 @@ namespace AC_DC_AUDIO
                 return;
 
             duration = 0;
-            timer = new Timer(1000);
+         
             timer.Elapsed += (s, args) =>
             {
                 Dispatcher.Invoke(() =>
@@ -58,7 +57,7 @@ namespace AC_DC_AUDIO
                     Timer.Text = TimeSpan.FromSeconds(duration++).ToString();
                 });
             };
-
+            timer = new Timer(1000);
             timer.Start();
             fileNameToSave = dialog.FileName;
 
@@ -84,7 +83,6 @@ namespace AC_DC_AUDIO
             timer.Stop();
             timer.Dispose();
         }
-        
 
         private void PlayWavFile_Click(object sender, RoutedEventArgs e)
         {
@@ -96,10 +94,7 @@ namespace AC_DC_AUDIO
 
             fileNameToLoad = dialog.FileName;
 
-            Dispatcher.Invoke(() =>
-            {
-                mciSendString($"play {fileNameToLoad} wait", "", 0, 0);
-            });
+            mciSendString($"play {fileNameToLoad} wait", "", 0, 0);
         }
     }
 }

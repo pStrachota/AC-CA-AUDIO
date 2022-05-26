@@ -5,10 +5,15 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>microphone_256_icon-icons.com_76000.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="frequency.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="microphone_256_icon-icons.com_76000.ico" />
   </ItemGroup>
 
   <ItemGroup>
