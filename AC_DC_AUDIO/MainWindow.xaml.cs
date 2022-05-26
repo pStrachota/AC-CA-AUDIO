@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace AC_DC_AUDIO
 {
@@ -20,9 +10,29 @@ namespace AC_DC_AUDIO
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private Timer timer;
+        private double duration;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void RecordButton_Click(object sender, RoutedEventArgs e)
+        {        
+            duration = 0;
+            timer = new Timer(1000);
+            timer.Elapsed += (s, args) =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Timer.Text = TimeSpan.FromSeconds(duration++).ToString();
+                });
+            };
+
+            timer.Start();
+
         }
     }
 }
