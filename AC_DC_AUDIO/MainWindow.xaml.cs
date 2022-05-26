@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using System.Timers;
 using System.Windows;
 
@@ -31,6 +32,9 @@ namespace AC_DC_AUDIO
             BitsDepth.ItemsSource = BithDepthsList;
         }
 
+        [DllImport("winmm.dll")]
+        static extern long mciSendString(string strCommand, String strReturn, int iReturnLength, int hwndCallback);
+
         private void RecordButton_Click(object sender, RoutedEventArgs e)
         {
             if (SampleRates.SelectedItem == null || BitsDepth.SelectedItem == null)
@@ -39,10 +43,8 @@ namespace AC_DC_AUDIO
                 return;
             }
 
-            var dialog = new SaveFileDialog
-            {
-                Filter = "Wave files | *.wav"
-            };
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "Wave files | *.wav";
 
             if (dialog.ShowDialog() != true)
                 return;
@@ -59,19 +61,33 @@ namespace AC_DC_AUDIO
 
             timer.Start();
             fileNameToSave = dialog.FileName;
+
+            string chosenSampleRate = SampleRates.SelectedItem.ToString();
+            string chosenBitsDepth = BitsDepth.SelectedItem.ToString();
+
+            mciSendString("open new Type waveaudio Alias recsound", "", 0, 0);
+            mciSendString($"set recsound time format ms bitspersample {chosenBitsDepth} channels 1 samplespersec {chosenSampleRate} bytespersec 192000 alignment 4", "", 0, 0);
+            mciSendString("record recsound", "", 0, 0);
+
+            RecordButton.IsEnabled = false;
+            StopButton.IsEnabled = true;
+
         }
 
         private void PlayWavFile_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog
-            {
-                Filter = "Wave files | *.wav"
-            };
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Wave files | *.wav";
 
             if (dialog.ShowDialog() != true)
                 return;
 
             fileNameToLoad = dialog.FileName;
+
+            Dispatcher.Invoke(() =>
+            {
+                mciSendString($"play {fileNameToLoad} wait", "", 0, 0);
+            });
         }
     }
 }
