@@ -74,6 +74,18 @@ namespace AC_DC_AUDIO
 
         }
 
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            mciSendString($"save recsound {fileNameToSave}", "", 0, 0);
+            mciSendString("close recsound ", "", 0, 0);
+
+            RecordButton.IsEnabled = true;
+            StopButton.IsEnabled = false;
+            timer.Stop();
+            timer.Dispose();
+        }
+        
+
         private void PlayWavFile_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog();
