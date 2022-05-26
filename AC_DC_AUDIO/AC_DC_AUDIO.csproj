@@ -7,4 +7,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="frequency.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="frequency.jpg" />
+  </ItemGroup>
+
 </Project>
