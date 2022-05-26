@@ -49,7 +49,9 @@ namespace AC_DC_AUDIO
                 return;
 
             duration = 0;
-         
+
+            timer = new Timer(1000);
+            timer.Start();
             timer.Elapsed += (s, args) =>
             {
                 Dispatcher.Invoke(() =>
@@ -57,8 +59,8 @@ namespace AC_DC_AUDIO
                     Timer.Text = TimeSpan.FromSeconds(duration++).ToString();
                 });
             };
-            timer = new Timer(1000);
-            timer.Start();
+           
+           
             fileNameToSave = dialog.FileName;
 
             string chosenSampleRate = SampleRates.SelectedItem.ToString();
